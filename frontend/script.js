@@ -70,16 +70,17 @@ findRecipeButton.addEventListener("click", function() {
     ingredients.push(ingredientItems[i].textContent);
   }
 
-  // Perform the API request using fetch
-  // Replace with the URL of your backend API
-  const apiEndpoint = 'http://localhost:3000/api/recipes';
+  // Create a URLSearchParams object to construct the query parameters
+  const searchParams = new URLSearchParams();
+  ingredients.forEach(ingredient => {
+    searchParams.append('ingredients', ingredient);
+  });
+
+  // Append the query parameters to the base URL
+  const apiEndpoint = `http://localhost:3000/api/recipes?${searchParams.toString()}`;
 
   fetch(apiEndpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ ingredients }),
+    method: 'GET', // Change this to 'GET' if you are fetching data
   })
     .then(async response => {
       if (!response.ok) {

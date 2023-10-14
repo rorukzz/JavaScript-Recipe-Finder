@@ -1,13 +1,14 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const axios = require('axios');
+const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
 const port = process.env.BACKEND_PORT || 3000;
 
-app.use(express.json());
+app.use(cors());
 
 // Define API endpoints and handle recipe search
 app.get('/api/recipes', async (req, res) => {
