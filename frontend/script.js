@@ -39,7 +39,7 @@ addIngredientButton.addEventListener("click", function() {
 
     // Optionally, you can add a remove button to each ingredient item
     const removeButton = document.createElement("button");
-    removeButton.textContent = "Remove";
+    removeButton.className = "btn-close aria-label=Close"
     ingredientItem.appendChild(removeButton);
 
     removeButton.addEventListener("click", function() {
