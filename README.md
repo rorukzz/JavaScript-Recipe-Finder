@@ -1,4 +1,3 @@
-```markdown
 # Frontend Recipe Application
 
 This recipe application allows users to search for recipes based on a list of ingredients. Users can add ingredients to their list, and the application will fetch recipes from the Edamam Recipe API that match those ingredients.
@@ -36,7 +35,7 @@ Before setting up and running the application, you need to have the following so
 
    ```bash
    git clone https://github.com/yourusername/recipe-app.git
-   ```
+
 
 2. Navigate to the project directory:
 
