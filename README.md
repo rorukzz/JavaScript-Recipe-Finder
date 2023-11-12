@@ -87,5 +87,3 @@ For questions or support, please contact rory.tait.folster@gmail.com.
 
 Happy cooking!
 ```
-
-Make sure to replace placeholders like `yourusername` with your actual GitHub username and update any other specific details as needed.
