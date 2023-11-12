@@ -7,6 +7,112 @@ const findRecipeButton = document.getElementById("find-recipe");
 // Retrieve stored ingredients from localStorage and display them
 const storedIngredients = JSON.parse(localStorage.getItem("ingredients")) || [];
 storedIngredients.forEach(ingredientValue => {
+  createIngredientElement(ingredientValue);
+});
+
+// Event listener for "Add Ingredient" button
+addIngredientButton.addEventListener("click", function() {
+  const inputField = document.getElementById("ingredient-input");
+  const ingredientValue = inputField.value.trim();
+
+  if (ingredientValue !== "") {
+    createIngredientElement(ingredientValue);
+
+    // Store the ingredient in localStorage
+    storedIngredients.push(ingredientValue);
+    localStorage.setItem("ingredients", JSON.stringify(storedIngredients));
+
+    // Clear the input field
+    inputField.value = "";
+  }
+});
+
+// Event listener for "Find Recipe" button
+findRecipeButton.addEventListener("click", function () {
+  const ingredients = Array.from(document.querySelectorAll("#ingredient-collection div"))
+    .map(ingredientItem => {
+      let ingredientText = ingredientItem.textContent.trim();
+
+      // Remove the "Remove" text if it's present
+      const removeButtonText = "Remove";
+      if (ingredientText.endsWith(removeButtonText)) {
+        ingredientText = ingredientText.slice(0, -removeButtonText.length).trim();
+      }
+
+      return ingredientText;
+    });
+
+  // Log the ingredients array before constructing the searchParams
+  console.log('Ingredients Array:', ingredients);
+
+  // Construct the searchParams based on the ingredients array
+  const searchQuery = ingredients.join('+');
+  const apiEndpoint = `https://api.edamam.com/api/recipes/v2?type=public&q=${searchQuery}&app_id=333df3a7&app_key=b5a28474569e162df635ca9862885186`;
+
+  // Log the API endpoint before making the request
+  console.log('API Endpoint:', apiEndpoint);
+
+  // Display a loading message or spinner while waiting for the response
+  const recipeResults = document.getElementById("recipe-results");
+  recipeResults.textContent = 'Loading...';
+
+  fetch(apiEndpoint, {
+    method: 'GET', // Change this to 'GET' if you are fetching data
+  })
+    .then(async response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      // Log the full response data to understand its structure
+      console.log('API Response:', data);
+
+      // Store the results in local storage
+      localStorage.setItem("recipeResults", JSON.stringify(data));
+
+      // Process and display the recipe results
+      recipeResults.innerHTML = '';
+
+      if (data.hits && data.hits.length > 0) {
+        data.hits.forEach(hit => {
+          const recipeItem = document.createElement("div");
+          recipeItem.classList.add("recipe-item");
+      
+          const recipeLabel = document.createElement("h3");
+          recipeLabel.classList.add("recipe-label");
+          recipeLabel.textContent = hit.recipe.label;
+      
+          const recipeImage = document.createElement("img");
+          recipeImage.classList.add("recipe-image");
+          recipeImage.src = hit.recipe.image;
+          recipeImage.alt = hit.recipe.label + " image";
+      
+          const recipeUrl = document.createElement("a");
+          recipeUrl.classList.add("recipe-link");
+          recipeUrl.href = hit.recipe.url;
+          recipeUrl.target = "_blank"; // Open link in a new tab
+          recipeUrl.textContent = "View Recipe";
+      
+          recipeItem.appendChild(recipeLabel);
+          recipeItem.appendChild(recipeImage);
+          recipeItem.appendChild(recipeUrl);
+      
+          recipeResults.appendChild(recipeItem);
+        });
+      } else {
+        recipeResults.textContent = "No recipes found with these ingredients.";
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      // Display an error message in case of an error
+      recipeResults.textContent = 'Error fetching recipes.';
+    });
+});
+
+// Function to create and append an ingredient element
+function createIngredientElement(ingredientValue) {
   const ingredientItem = document.createElement("div");
   ingredientItem.textContent = ingredientValue;
   ingredientCollection.appendChild(ingredientItem);
@@ -24,103 +130,4 @@ storedIngredients.forEach(ingredientValue => {
       localStorage.setItem("ingredients", JSON.stringify(storedIngredients));
     }
   });
-});
-
-// Event listener for "Add Ingredient" button
-addIngredientButton.addEventListener("click", function() {
-  const inputField = document.getElementById("ingredient-input");
-  const ingredientValue = inputField.value.trim();
-
-  if (ingredientValue !== "") {
-    // Create a new element to display the ingredient in the collection
-    const ingredientItem = document.createElement("div");
-
-    // Store the ingredient text content in a separate variable
-    ingredientItem.textContent = ingredientValue;
-
-    ingredientCollection.appendChild(ingredientItem);
-
-    // Optionally, you can add a remove button to each ingredient item
-    const removeButton = document.createElement("button");
-    removeButton.className = "btn-close aria-label=Close"
-    ingredientItem.appendChild(removeButton);
-
-    removeButton.addEventListener("click", function() {
-      ingredientCollection.removeChild(ingredientItem);
-      // Remove the ingredient from storedIngredients and update localStorage
-      const index = storedIngredients.indexOf(ingredientValue);
-      if (index > -1) {
-        storedIngredients.splice(index, 1);
-        localStorage.setItem("ingredients", JSON.stringify(storedIngredients));
-      }
-    });
-
-    // Store the ingredient in localStorage
-    storedIngredients.push(ingredientValue);
-    localStorage.setItem("ingredients", JSON.stringify(storedIngredients));
-
-    // Clear the input field
-    inputField.value = "";
-  }
-});
-
-// Event listener for "Find Recipe" button
-findRecipeButton.addEventListener("click", function() {
-  const ingredients = [];
-  const ingredientItems = ingredientCollection.children;
-
-  for (let i = 0; i < ingredientItems.length; i++) {
-    const ingredientItem = ingredientItems[i];
-    let ingredientText = ingredientItem.textContent.trim();
-
-    // Remove the "Remove" text if it's present
-    const removeButtonText = "Remove";
-    if (ingredientText.endsWith(removeButtonText)) {
-      ingredientText = ingredientText.slice(0, -removeButtonText.length).trim();
-    }
-
-    // Check if the ingredientText is not an empty string
-    if (ingredientText) {
-      ingredients.push(ingredientText);
-    }
-  }
-
-  // Log the ingredients array before constructing the searchParams
-  console.log('Ingredients Array:', ingredients);
-
-  // Append the query parameters to the base URL
-  const apiEndpoint = `http://localhost:3000/api/recipes?${searchParams.toString()}`;
-
-  // Log the API endpoint before making the request
-  console.log('API Endpoint:', apiEndpoint);
-
-  fetch(apiEndpoint, {
-    method: 'GET', // Change this to 'GET' if you are fetching data
-  })
-    .then(async response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      // Process and display the recipe results
-      const recipeResults = document.getElementById("recipe-results");
-      recipeResults.innerHTML = '';
-
-      if (data.recipes && data.recipes.length > 0) {
-        data.recipes.forEach(recipe => {
-          const recipeItem = document.createElement("div");
-          for (const prop in recipe) {
-            if (recipe.hasOwnProperty(prop)) {
-              const recipeProperty = document.createElement("p");
-              recipeProperty.textContent = `${prop}: ${recipe[prop]}`;
-              recipeItem.appendChild(recipeProperty);
-            }
-          }
-          recipeResults.appendChild(recipeItem);
-        });
-      } else {
-        recipeResults.textContent = "No recipes found with these ingredients.";
-      }
-    })
-    .catch(error => console.error(error));
-});
+}
