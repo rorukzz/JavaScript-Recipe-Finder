@@ -120,6 +120,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Enjoy using your full-stack recipe application! If you encounter any issues or have suggestions for improvements, please feel free to contribute or contact us.
 
-For questions or support, please contact [yourname@example.com](mailto:yourname@example.com).
+For questions or support, please contact [rory.tait.folster@gmail.com](mailto:rory.tait.folster@gmail.com).
 
 **Happy cooking!**

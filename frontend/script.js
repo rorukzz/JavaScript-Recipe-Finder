@@ -34,7 +34,10 @@ addIngredientButton.addEventListener("click", function() {
   if (ingredientValue !== "") {
     // Create a new element to display the ingredient in the collection
     const ingredientItem = document.createElement("div");
+
+    // Store the ingredient text content in a separate variable
     ingredientItem.textContent = ingredientValue;
+
     ingredientCollection.appendChild(ingredientItem);
 
     // Optionally, you can add a remove button to each ingredient item
@@ -67,17 +70,29 @@ findRecipeButton.addEventListener("click", function() {
   const ingredientItems = ingredientCollection.children;
 
   for (let i = 0; i < ingredientItems.length; i++) {
-    ingredients.push(ingredientItems[i].textContent);
+    const ingredientItem = ingredientItems[i];
+    let ingredientText = ingredientItem.textContent.trim();
+
+    // Remove the "Remove" text if it's present
+    const removeButtonText = "Remove";
+    if (ingredientText.endsWith(removeButtonText)) {
+      ingredientText = ingredientText.slice(0, -removeButtonText.length).trim();
+    }
+
+    // Check if the ingredientText is not an empty string
+    if (ingredientText) {
+      ingredients.push(ingredientText);
+    }
   }
 
-  // Create a URLSearchParams object to construct the query parameters
-  const searchParams = new URLSearchParams();
-  ingredients.forEach(ingredient => {
-    searchParams.append('ingredients', ingredient);
-  });
+  // Log the ingredients array before constructing the searchParams
+  console.log('Ingredients Array:', ingredients);
 
   // Append the query parameters to the base URL
   const apiEndpoint = `http://localhost:3000/api/recipes?${searchParams.toString()}`;
+
+  // Log the API endpoint before making the request
+  console.log('API Endpoint:', apiEndpoint);
 
   fetch(apiEndpoint, {
     method: 'GET', // Change this to 'GET' if you are fetching data
