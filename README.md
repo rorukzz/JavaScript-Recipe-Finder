@@ -86,4 +86,3 @@ Enjoy using your recipe application! If you encounter any issues or have suggest
 For questions or support, please contact rory.tait.folster@gmail.com.
 
 Happy cooking!
-```
