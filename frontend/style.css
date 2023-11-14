@@ -84,3 +84,7 @@ h1 {
     text-align: center; /* Center text inside the container */
     margin: 20px auto; /* Margin adds space outside the container */
   }
+
+  #ingredientCollection:empty {
+    display: none;
+  }

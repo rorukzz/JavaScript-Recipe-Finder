@@ -139,6 +139,9 @@ function createIngredientElement(ingredientValue) {
       storedIngredients.splice(index, 1);
       localStorage.setItem("ingredients", JSON.stringify(storedIngredients));
     }
+
+    // Check if ingredientCollection is empty and toggle visibility
+    toggleVisibility();
   });
 
   // Get the number of child elements (ingredients)
@@ -156,4 +159,37 @@ function createIngredientElement(ingredientValue) {
   if (ingredientCount % 3 === 0) {
     ingredientItem.style.clear = "left";
   }
+
+  // Check if ingredientCollection is empty and toggle visibility
+  toggleVisibility();
 }
+
+// Function to toggle visibility of ingredientCollection
+function toggleVisibility() {
+  const ingredientCount = ingredientCollection.childElementCount;
+  if (ingredientCount === 0) {
+    ingredientCollection.style.display = "none";
+  } else {
+    ingredientCollection.style.display = "flex";
+  }
+}
+
+
+// Trigger 'Add Ingredient' function on 'Enter' key press
+document.getElementById("ingredient-input").addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    const inputField = document.getElementById("ingredient-input");
+    const ingredientValue = inputField.value.trim();
+  
+    if (ingredientValue !== "") {
+      createIngredientElement(ingredientValue);
+  
+      // Store the ingredient in localStorage
+      storedIngredients.push(ingredientValue);
+      localStorage.setItem("ingredients", JSON.stringify(storedIngredients));
+  
+      // Clear the input field
+      inputField.value = "";
+    }
+  }
+});
