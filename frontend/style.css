@@ -72,3 +72,15 @@ h1 {
   .recipe-link:hover {
     text-decoration: underline;
   }
+
+  .ingredientList-container {
+    padding: 20px; /* Space inside the container */
+    border: 2px solid grey; /* Small border */
+    border-radius: 8px; /* Round the edges */
+    width: 40%;
+    display: flex;
+    justify-content: center; /* Horizontal centering */
+    align-items: center; /* Vertical centering */
+    text-align: center; /* Center text inside the container */
+    margin: 20px auto; /* Margin adds space outside the container */
+  }

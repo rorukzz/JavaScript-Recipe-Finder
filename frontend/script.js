@@ -71,38 +71,43 @@ findRecipeButton.addEventListener("click", function () {
       // Store the results in local storage
       localStorage.setItem("recipeResults", JSON.stringify(data));
 
-      // Process and display the recipe results
-      recipeResults.innerHTML = '';
+  // Process and display the recipe results
+  recipeResults.innerHTML = '';
 
-      if (data.hits && data.hits.length > 0) {
-        data.hits.forEach(hit => {
-          const recipeItem = document.createElement("div");
-          recipeItem.classList.add("recipe-item");
-      
-          const recipeLabel = document.createElement("h3");
-          recipeLabel.classList.add("recipe-label");
-          recipeLabel.textContent = hit.recipe.label;
-      
-          const recipeImage = document.createElement("img");
-          recipeImage.classList.add("recipe-image");
-          recipeImage.src = hit.recipe.image;
-          recipeImage.alt = hit.recipe.label + " image";
-      
-          const recipeUrl = document.createElement("a");
-          recipeUrl.classList.add("recipe-link");
-          recipeUrl.href = hit.recipe.url;
-          recipeUrl.target = "_blank"; // Open link in a new tab
-          recipeUrl.textContent = "View Recipe";
-      
-          recipeItem.appendChild(recipeLabel);
-          recipeItem.appendChild(recipeImage);
-          recipeItem.appendChild(recipeUrl);
-      
-          recipeResults.appendChild(recipeItem);
-        });
-      } else {
-        recipeResults.textContent = "No recipes found with these ingredients.";
-      }
+  if (data.hits && data.hits.length > 0) {
+    data.hits.forEach(hit => {
+      const recipeItem = document.createElement("div");
+      recipeItem.classList.add("recipe-item");
+
+      const recipeLabel = document.createElement("h3");
+      recipeLabel.classList.add("recipe-label");
+      recipeLabel.textContent = hit.recipe.label;
+
+      const recipeImage = document.createElement("img");
+      recipeImage.classList.add("recipe-image");
+      recipeImage.src = hit.recipe.image;
+      recipeImage.alt = hit.recipe.label + " image";
+
+      const recipeUrl = document.createElement("a");
+      recipeUrl.classList.add("recipe-link");
+      recipeUrl.href = hit.recipe.url;
+      recipeUrl.target = "_blank"; // Open link in a new tab
+      recipeUrl.textContent = "View Recipe";
+
+      // Make the image clickable
+      recipeImage.addEventListener("click", function () {
+        window.open(hit.recipe.url, "_blank");
+      });
+
+      recipeItem.appendChild(recipeLabel);
+      recipeItem.appendChild(recipeImage);
+      recipeItem.appendChild(recipeUrl);
+
+      recipeResults.appendChild(recipeItem);
+    });
+} else {
+  recipeResults.textContent = "No recipes found with these ingredients.";
+}
     })
     .catch(error => {
       console.error(error);
@@ -111,14 +116,19 @@ findRecipeButton.addEventListener("click", function () {
     });
 });
 
-// Function to create and append an ingredient element
 function createIngredientElement(ingredientValue) {
   const ingredientItem = document.createElement("div");
   ingredientItem.textContent = ingredientValue;
+  ingredientItem.style.border = "1px solid black"; // Border around each ingredient
+  ingredientItem.style.padding = "8px"; // Padding inside each ingredient
+  ingredientItem.style.margin = "4px"; // Adjust margin between ingredients
+
   ingredientCollection.appendChild(ingredientItem);
 
   const removeButton = document.createElement("button");
   removeButton.textContent = "Remove";
+  removeButton.style.marginLeft = "8px"; // Padding between remove button and text
+
   ingredientItem.appendChild(removeButton);
 
   removeButton.addEventListener("click", function() {
@@ -130,4 +140,20 @@ function createIngredientElement(ingredientValue) {
       localStorage.setItem("ingredients", JSON.stringify(storedIngredients));
     }
   });
+
+  // Get the number of child elements (ingredients)
+  const ingredientCount = ingredientCollection.childElementCount;
+
+  // Set flexbox display to create a grid-like layout
+  ingredientCollection.style.display = "flex";
+  ingredientCollection.style.flexWrap = "wrap";
+
+  // Adjust width to accommodate three items per row
+  const widthPercentage = 100 / 3;
+  ingredientItem.style.width = `calc(${widthPercentage}% - 8px)`; // Subtracting margin and border
+
+  // After every third ingredient, create a new line
+  if (ingredientCount % 3 === 0) {
+    ingredientItem.style.clear = "left";
+  }
 }
