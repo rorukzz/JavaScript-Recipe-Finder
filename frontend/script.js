@@ -33,8 +33,8 @@ findRecipeButton.addEventListener("click", function () {
     .map(ingredientItem => {
       let ingredientText = ingredientItem.textContent.trim();
 
-      // Remove the "Remove" text if it's present
-      const removeButtonText = "Remove";
+      // Remove the "X" text if it's present
+      const removeButtonText = "X";
       if (ingredientText.endsWith(removeButtonText)) {
         ingredientText = ingredientText.slice(0, -removeButtonText.length).trim();
       }
@@ -126,7 +126,7 @@ function createIngredientElement(ingredientValue) {
   ingredientCollection.appendChild(ingredientItem);
 
   const removeButton = document.createElement("button");
-  removeButton.textContent = "Remove";
+  removeButton.innerHTML = '<span class="bi bi-x-circle">X</span>';
   removeButton.style.marginLeft = "8px"; // Padding between remove button and text
 
   ingredientItem.appendChild(removeButton);
@@ -173,7 +173,6 @@ function toggleVisibility() {
     ingredientCollection.style.display = "flex";
   }
 }
-
 
 // Trigger 'Add Ingredient' function on 'Enter' key press
 document.getElementById("ingredient-input").addEventListener("keyup", function(event) {

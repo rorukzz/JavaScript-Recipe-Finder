@@ -1,4 +1,7 @@
-/* Basic CSS for styling */
+body {
+  font-family: 'Helvetica'
+}
+
 h1 {
     text-align: center;
   }
@@ -14,7 +17,6 @@ h1 {
   button {
     margin: 5px;
     padding: 5px 10px;
-    background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -83,8 +85,4 @@ h1 {
     align-items: center; /* Vertical centering */
     text-align: center; /* Center text inside the container */
     margin: 20px auto; /* Margin adds space outside the container */
-  }
-
-  #ingredientCollection:empty {
-    display: none;
   }
