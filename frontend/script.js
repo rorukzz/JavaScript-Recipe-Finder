@@ -71,40 +71,65 @@ findRecipeButton.addEventListener("click", function () {
       // Store the results in local storage
       localStorage.setItem("recipeResults", JSON.stringify(data));
 
-  // Process and display the recipe results
-  recipeResults.innerHTML = '';
+// Process and display the recipe results
+recipeResults.innerHTML = '';
 
-  if (data.hits && data.hits.length > 0) {
-    data.hits.forEach(hit => {
-      const recipeItem = document.createElement("div");
-      recipeItem.classList.add("recipe-item");
+// Process and display the recipe results
+recipeResults.innerHTML = '';
 
-      const recipeLabel = document.createElement("h3");
-      recipeLabel.classList.add("recipe-label");
-      recipeLabel.textContent = hit.recipe.label;
+if (data.hits && data.hits.length > 0) {
+  data.hits.forEach(hit => {
+    const recipeItem = document.createElement("div");
+    recipeItem.classList.add("recipe-item");
+    recipeItem.style.textAlign = "center"; // Center align the content inside recipe item
 
-      const recipeImage = document.createElement("img");
-      recipeImage.classList.add("recipe-image");
-      recipeImage.src = hit.recipe.image;
-      recipeImage.alt = hit.recipe.label + " image";
+    const titleContainer = document.createElement("div");
+    titleContainer.style.maxHeight = "60px"; // Set a fixed height for the title container
+    titleContainer.style.overflow = "hidden"; // Hide overflow content
+    titleContainer.style.marginBottom = "10px"; // Add margin to the bottom of the title container
 
-      const recipeUrl = document.createElement("a");
-      recipeUrl.classList.add("recipe-link");
-      recipeUrl.href = hit.recipe.url;
-      recipeUrl.target = "_blank"; // Open link in a new tab
-      recipeUrl.textContent = "View Recipe";
+    const recipeLabel = document.createElement("h3");
+    recipeLabel.classList.add("recipe-label");
+    recipeLabel.textContent = hit.recipe.label;
 
-      // Make the image clickable
-      recipeImage.addEventListener("click", function () {
-        window.open(hit.recipe.url, "_blank");
-      });
+    titleContainer.appendChild(recipeLabel);
 
-      recipeItem.appendChild(recipeLabel);
-      recipeItem.appendChild(recipeImage);
-      recipeItem.appendChild(recipeUrl);
+    const cuisineLabel = document.createElement("span");
+    cuisineLabel.classList.add("badge", "bg-secondary", "me-1");
+    cuisineLabel.textContent = hit.recipe.cuisineType ? hit.recipe.cuisineType : ''; // Display cuisineType if available
+    cuisineLabel.style.paddingBottom = "2px"; // Add padding only to the bottom of the cuisine label
 
-      recipeResults.appendChild(recipeItem);
+    const dietLabel = document.createElement("span");
+    dietLabel.classList.add("badge", "bg-info", "me-1");
+    dietLabel.textContent = hit.recipe.dietLabels ? hit.recipe.dietLabels.join(', ') : ''; // Display dietLabels if available
+    dietLabel.style.paddingBottom = "2px"; // Add padding only to the bottom of the diet label
+
+    const labelContainer = document.createElement("div");
+    labelContainer.appendChild(cuisineLabel);
+    labelContainer.appendChild(dietLabel);
+
+    const recipeImage = document.createElement("img");
+    recipeImage.classList.add("recipe-image");
+    recipeImage.src = hit.recipe.image;
+    recipeImage.alt = hit.recipe.label + " image";
+    recipeImage.style.width = "200px"; // Set a fixed width for the image
+    recipeImage.style.height = "200px"; // Set a fixed height for the image
+    recipeImage.style.objectFit = "cover"; // Maintain aspect ratio and cover the container
+
+    const recipeBtn = document.createElement("button");
+    recipeBtn.classList.add("btn", "btn-primary", "mt-2"); // Bootstrap button classes + margin-top (mt-2)
+    recipeBtn.textContent = "Open Recipe";
+    recipeBtn.addEventListener("click", function () {
+      window.open(hit.recipe.url, "_blank");
     });
+
+    recipeItem.appendChild(titleContainer);
+    recipeItem.appendChild(labelContainer); // Append cuisineType and dietLabels
+    recipeItem.appendChild(recipeImage);
+    recipeItem.appendChild(recipeBtn);
+
+    recipeResults.appendChild(recipeItem);
+  });
 } else {
   recipeResults.textContent = "No recipes found with these ingredients.";
 }
