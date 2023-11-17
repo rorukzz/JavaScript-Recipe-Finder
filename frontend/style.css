@@ -15,6 +15,13 @@ body {
 h1 {
     text-align: center;
   }
+
+  .footer {
+    background-color: #f8f9fa; /* Background color */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
   
   input {
     margin: 5px;

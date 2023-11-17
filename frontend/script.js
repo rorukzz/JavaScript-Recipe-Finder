@@ -78,15 +78,17 @@ recipeResults.innerHTML = '';
 recipeResults.innerHTML = '';
 
 if (data.hits && data.hits.length > 0) {
-  data.hits.forEach(hit => {
+  const recipeResults = document.getElementById("recipe-results");
+
+  data.hits.slice(0, 21).forEach(hit => {
+    const colDiv = document.createElement("div");
+    colDiv.classList.add("col-md-4", "mb-4");
+
     const recipeCard = document.createElement("div");
-    recipeCard.classList.add("card", "mb-3", "col-md-3"); // Reduced size by 25% (col-md-3)
-    recipeCard.style.marginRight = "10px"; // Adding right margin to create space between cards
+    recipeCard.classList.add("card");
 
     const imageElement = document.createElement("img");
     imageElement.classList.add("card-img-top");
-    imageElement.style.width = "100%";
-    imageElement.style.height = "150px"; // Adjusted height for smaller cards
     imageElement.src = hit.recipe.image;
     imageElement.alt = hit.recipe.label + " image";
 
@@ -98,31 +100,33 @@ if (data.hits && data.hits.length > 0) {
     titleElement.textContent = hit.recipe.label;
 
     const labelContainer = document.createElement("div");
+    labelContainer.classList.add("text-center");
 
     const cuisineLabel = document.createElement("span");
     cuisineLabel.classList.add("badge", "bg-secondary", "me-1");
     cuisineLabel.textContent = hit.recipe.cuisineType ? hit.recipe.cuisineType : '';
 
-    labelContainer.appendChild(cuisineLabel);
-
     const btnElement = document.createElement("button");
-    btnElement.classList.add("btn", "btn-outline-dark", "mt-3", "mx-auto", "d-block"); // Center button (mt-3, mx-auto, d-block)
+    btnElement.classList.add("btn", "btn-outline-dark", "mt-3", "d-block");
     btnElement.textContent = "Open Recipe";
     btnElement.addEventListener("click", function () {
       window.open(hit.recipe.url, "_blank");
     });
 
     cardBody.appendChild(titleElement);
-    cardBody.appendChild(labelContainer); // Add cuisine type label
+    labelContainer.appendChild(cuisineLabel);
+    cardBody.appendChild(labelContainer);
     cardBody.appendChild(btnElement);
 
     recipeCard.appendChild(imageElement);
     recipeCard.appendChild(cardBody);
 
-    recipeResults.appendChild(recipeCard);
+    colDiv.appendChild(recipeCard);
+    recipeResults.appendChild(colDiv);
   });
 } else {
-  recipeResults.textContent = "No recipes found with these ingredients.";
+  const recipeResults = document.getElementById("recipe-results");
+  recipeResults.innerHTML = "<p class='text-center'>No recipes found with these ingredients.</p>";
 }
 
     })
