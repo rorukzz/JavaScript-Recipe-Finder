@@ -21,6 +21,7 @@ h1 {
     position: fixed;
     bottom: 0;
     width: 100%;
+    height: 5%;
   }
   
   input {
@@ -50,6 +51,7 @@ h1 {
   
   #recipe-results {
     margin-top: 20px;
+    margin-bottom: 5%;
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
@@ -93,7 +95,7 @@ h1 {
   }
 
   .ingredientList-container {
-    padding: 20px; /* Space inside the container */
+    padding: 20px; /* Space inside the container */ 
     border: 2px solid grey; /* Small border */
     border-radius: 8px; /* Round the edges */
     width: 40%;

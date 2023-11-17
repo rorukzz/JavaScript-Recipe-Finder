@@ -138,12 +138,15 @@ if (data.hits && data.hits.length > 0) {
 });
 
 function createIngredientElement(ingredientValue) {
+  const capitalizedIngredient = ingredientValue.charAt(0).toUpperCase() + ingredientValue.slice(1).toLowerCase();
+
   const ingredientItem = document.createElement("div");
-  ingredientItem.textContent = ingredientValue;
+  ingredientItem.textContent = capitalizedIngredient; // Capitalizing the first letter of the ingredient
   ingredientItem.style.border = "1px solid black"; // Border around each ingredient
+  ingredientItem.style.borderRadius = "5px";
   ingredientItem.style.padding = "8px"; // Padding inside each ingredient
   ingredientItem.style.margin = "4px"; // Adjust margin between ingredients
-
+  
   ingredientCollection.appendChild(ingredientItem);
 
   const removeButton = document.createElement("button");
