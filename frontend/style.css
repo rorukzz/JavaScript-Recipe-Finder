@@ -1,5 +1,15 @@
 body {
-  font-family: 'Helvetica'
+  font-family: 'Helvetica';
+  margin: 0; /* Add margin to reset browser default */
+  padding: 0; /* Add padding to reset browser default */
+}
+
+.main-body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #B0EEB0, #77DD77);
+  width: 100%;
+  min-height: 100vh;
 }
 
 h1 {
