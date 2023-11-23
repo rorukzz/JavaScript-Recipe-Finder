@@ -78,61 +78,57 @@ recipeResults.innerHTML = '';
 recipeResults.innerHTML = '';
 
 if (data.hits && data.hits.length > 0) {
-  data.hits.forEach(hit => {
-    const recipeItem = document.createElement("div");
-    recipeItem.classList.add("recipe-item");
-    recipeItem.style.textAlign = "center"; // Center align the content inside recipe item
+  const recipeResults = document.getElementById("recipe-results");
 
-    const titleContainer = document.createElement("div");
-    titleContainer.style.maxHeight = "60px"; // Set a fixed height for the title container
-    titleContainer.style.overflow = "hidden"; // Hide overflow content
-    titleContainer.style.marginBottom = "10px"; // Add margin to the bottom of the title container
+  data.hits.slice(0, 21).forEach(hit => {
+    const colDiv = document.createElement("div");
+    colDiv.classList.add("col-md-4", "mb-4");
 
-    const recipeLabel = document.createElement("h3");
-    recipeLabel.classList.add("recipe-label");
-    recipeLabel.textContent = hit.recipe.label;
+    const recipeCard = document.createElement("div");
+    recipeCard.classList.add("card");
 
-    titleContainer.appendChild(recipeLabel);
+    const imageElement = document.createElement("img");
+    imageElement.classList.add("card-img-top");
+    imageElement.src = hit.recipe.image;
+    imageElement.alt = hit.recipe.label + " image";
+
+    const cardBody = document.createElement("div");
+    cardBody.classList.add("card-body");
+
+    const titleElement = document.createElement("h5");
+    titleElement.classList.add("card-title");
+    titleElement.textContent = hit.recipe.label;
+
+    const labelContainer = document.createElement("div");
+    labelContainer.classList.add("text-center");
 
     const cuisineLabel = document.createElement("span");
     cuisineLabel.classList.add("badge", "bg-secondary", "me-1");
-    cuisineLabel.textContent = hit.recipe.cuisineType ? hit.recipe.cuisineType : ''; // Display cuisineType if available
-    cuisineLabel.style.paddingBottom = "2px"; // Add padding only to the bottom of the cuisine label
+    cuisineLabel.textContent = hit.recipe.cuisineType ? hit.recipe.cuisineType : '';
 
-    const dietLabel = document.createElement("span");
-    dietLabel.classList.add("badge", "bg-info", "me-1");
-    dietLabel.textContent = hit.recipe.dietLabels ? hit.recipe.dietLabels.join(', ') : ''; // Display dietLabels if available
-    dietLabel.style.paddingBottom = "2px"; // Add padding only to the bottom of the diet label
-
-    const labelContainer = document.createElement("div");
-    labelContainer.appendChild(cuisineLabel);
-    labelContainer.appendChild(dietLabel);
-
-    const recipeImage = document.createElement("img");
-    recipeImage.classList.add("recipe-image");
-    recipeImage.src = hit.recipe.image;
-    recipeImage.alt = hit.recipe.label + " image";
-    recipeImage.style.width = "200px"; // Set a fixed width for the image
-    recipeImage.style.height = "200px"; // Set a fixed height for the image
-    recipeImage.style.objectFit = "cover"; // Maintain aspect ratio and cover the container
-
-    const recipeBtn = document.createElement("button");
-    recipeBtn.classList.add("btn", "btn-primary", "mt-2"); // Bootstrap button classes + margin-top (mt-2)
-    recipeBtn.textContent = "Open Recipe";
-    recipeBtn.addEventListener("click", function () {
+    const btnElement = document.createElement("button");
+    btnElement.classList.add("btn", "btn-outline-dark", "mt-3", "d-block");
+    btnElement.textContent = "Open Recipe";
+    btnElement.addEventListener("click", function () {
       window.open(hit.recipe.url, "_blank");
     });
 
-    recipeItem.appendChild(titleContainer);
-    recipeItem.appendChild(labelContainer); // Append cuisineType and dietLabels
-    recipeItem.appendChild(recipeImage);
-    recipeItem.appendChild(recipeBtn);
+    cardBody.appendChild(titleElement);
+    labelContainer.appendChild(cuisineLabel);
+    cardBody.appendChild(labelContainer);
+    cardBody.appendChild(btnElement);
 
-    recipeResults.appendChild(recipeItem);
+    recipeCard.appendChild(imageElement);
+    recipeCard.appendChild(cardBody);
+
+    colDiv.appendChild(recipeCard);
+    recipeResults.appendChild(colDiv);
   });
 } else {
-  recipeResults.textContent = "No recipes found with these ingredients.";
+  const recipeResults = document.getElementById("recipe-results");
+  recipeResults.innerHTML = "<p class='text-center'>No recipes found with these ingredients.</p>";
 }
+
     })
     .catch(error => {
       console.error(error);
@@ -142,16 +138,19 @@ if (data.hits && data.hits.length > 0) {
 });
 
 function createIngredientElement(ingredientValue) {
+  const capitalizedIngredient = ingredientValue.charAt(0).toUpperCase() + ingredientValue.slice(1).toLowerCase();
+
   const ingredientItem = document.createElement("div");
-  ingredientItem.textContent = ingredientValue;
+  ingredientItem.textContent = capitalizedIngredient; // Capitalizing the first letter of the ingredient
   ingredientItem.style.border = "1px solid black"; // Border around each ingredient
+  ingredientItem.style.borderRadius = "5px";
   ingredientItem.style.padding = "8px"; // Padding inside each ingredient
   ingredientItem.style.margin = "4px"; // Adjust margin between ingredients
-
+  
   ingredientCollection.appendChild(ingredientItem);
 
   const removeButton = document.createElement("button");
-  removeButton.innerHTML = '<span class="bi bi-x-circle">X</span>';
+  removeButton.innerHTML = '<span class="fas fa-times fa-xs">X</span>';
   removeButton.style.marginLeft = "8px"; // Padding between remove button and text
 
   ingredientItem.appendChild(removeButton);
