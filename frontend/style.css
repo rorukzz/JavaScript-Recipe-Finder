@@ -1,4 +1,4 @@
-body {
+html, body {
   font-family: 'Helvetica';
   margin: 0; /* Add margin to reset browser default */
   padding: 0; /* Add padding to reset browser default */
@@ -17,11 +17,16 @@ h1 {
   }
 
   .footer {
-    background-color: #f8f9fa; /* Background color */
+    background-color: #CECECD; /* Background color */
+    color: white;
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 5%;
+    height: 6%;
+  }
+
+  .footer-link {
+    color: white;
   }
   
   input {
